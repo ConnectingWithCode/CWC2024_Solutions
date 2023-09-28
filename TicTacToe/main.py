@@ -30,15 +30,20 @@ def get_index(x, y):
 
 @board.when_clicked
 def board_click():
-    print("You clicked at ")
     index = get_index(play.mouse.x, play.mouse.y)
-    print(index)
     if board.turn == "X" and marks[index].state == "-":
         marks[index].image = "x.png"
         marks[index].state = "X"
     elif board.turn == "O" and marks[index].state == "-":
         marks[index].image = "o.png"
         marks[index].state = "O"
+
+    is_full = True
+    for k in range(len(marks)):
+        if marks[k].state == "-":
+            is_full = False
+    if is_full:
+        board.winner = "T"
 
     if ((board.turn == marks[0].state
          and board.turn == marks[1].state
@@ -67,16 +72,15 @@ def board_click():
         board.winner = board.turn
 
     if board.winner == "X":
-        board.turn = "The Winner is X!"
+        message.words = "The Winner is X!"
         board.turn = "-"
-    if board.winner == "O":
-        board.turn = "The Winner is O!"
+    elif board.winner == "O":
+        message.words = "The Winner is O!"
         board.turn = "-"
-    if board.winner == "T":
-        board.turn = "Tie"
+    elif board.winner == "T":
+        message.words = "Tie Game"
         board.turn = "-"
-
-    if board.turn == "X":
+    elif board.turn == "X":
         board.turn = "O"
         message.words = "O's Turn"
     elif board.turn == "O":

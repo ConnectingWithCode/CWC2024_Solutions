@@ -4,7 +4,8 @@ board = play.new_image("board.png", size=45)
 board.winner = "-"  # Values:   "-" "X" "O" "T"
 board.turn = "X"  # Values:   "X" "O"
 
-message = play.new_text("X's Turn", y=220, font_size=100)
+message = play.new_text("X's Turn", y=220, font_size=80)
+new_game = play.new_text("", y=-220, color="blue", font_size=40)
 
 marks = [
     play.new_image("blank.png", x=-100, y=100, size=50),
@@ -20,6 +21,17 @@ marks = [
 
 for mark in marks:
     mark.state = "-"
+
+
+@new_game.when_clicked
+def start_new_game():
+    for mark in marks:
+        mark.state = "-"
+        mark.image = "blank.png"
+    board.winner = "-"  # Values:   "-" "X" "O" "T"
+    board.turn = "X"  # Values:   "X" "O"
+    message.words = "X's Turn"  # On your own change the first player!
+    new_game.words = ""
 
 
 def get_index(x, y):
@@ -97,5 +109,7 @@ def board_click():
         board.turn = "X"
         message.words = "X's Turn"
 
+    if board.turn == "-":
+        new_game.words = "New Game"
 
 play.start_program()

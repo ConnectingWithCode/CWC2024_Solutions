@@ -45,6 +45,16 @@ def board_click():
     if is_full:
         board.winner = "T"
 
+    # if (board.turn == marks[0].state
+    #         and board.turn == marks[1].state
+    #         and board.turn == marks[2].state):
+    #     board.winner = board.turn
+
+    # if (board.turn == marks[3].state
+    #         and board.turn == marks[4].state
+    #         and board.turn == marks[5].state):
+    #     board.winner = board.turn
+
     if ((board.turn == marks[0].state
          and board.turn == marks[1].state
          and board.turn == marks[2].state)

@@ -1,61 +1,59 @@
 import play
 import random
 
-# play.new_image("background.png", size=150)
+game = play.new_image("background.png", size=84)
+game.counter = 0
+game.game_over = False
 
-play.new_text(f"Linear Lights Out",
+play.new_text("Linear Lights Out",
               y=200,
               font_size=100,
               color='yellow')
 
-score_text = play.new_text(f"You won in _ moves!",
-                           y=100,
-                           font_size=50,
-                           color='yellow')
-score_text.hide()
+### Reminder for 11/16 - change yellow, maybe update start game to be random presses
+
+message = play.new_text("Turn all of the lights off!",
+                        y=100,
+                        font_size=50,
+                        color='yellow')
 
 light_list = []
-light_images = ["light_on.png", "light_off.png"]
+light_images = ["light_off.png", "light_on.png"]
 
-you_win_light = play.new_image(light_images[0],
-                               x=0,
-                               y=-150,
-                               size=75)
-you_win_light.game_over = False
-you_win_light.isOn = True
-you_win_light.counter = 0
-# you_win_light.hide()
-
+# Creates the seven light sprites
 for k in range(7):
-    if random.random() < 0.5:
-        image_filename = light_images[0]
-        image_number = 0
-    else:
-        image_filename = light_images[1]
-        image_number = 1
-
-    light = play.new_image(image_filename,
+    light = play.new_image(light_images[0],
                            x=-300 + k * 100,
                            y=0,
                            size=50)
-    if image_number == 0:
-        light.isOn = True
-    else:
-        light.isOn = False
+    light.is_on = False
     light.num = k
     light_list.append(light)
 
 
+def reset_game():
+    game.counter = 0
+    game.game_over = False
+    message.words = "Turn all of the lights off!"
+    for k in range(7):
+        if random.random() < 0.5:
+            light_list[k].image = light_images[0]
+            light_list[k].is_on = False
+        else:
+            light_list[k].image = light_images[1]
+            light_list[k].is_on = True
+
+reset_game()
+
 @play.repeat_forever
 async def control_lights():
-    if you_win_light.game_over:
-        if not you_win_light.isOn:
-            you_win_light.image = light_images[1]
-        score_text.words = f"You won in {you_win_light.counter} moves!"
-        if you_win_light.counter == 1:
-            score_text.words = f"You won in {you_win_light.counter} move!"
-        score_text.show()
-        you_win_light.show()
+    if game.game_over:
+        message.words = f"You won in {game.counter} moves!"
+        if game.counter == 1:
+            message.words = f"You won in {game.counter} move!"
+        message.show()
+        await play.timer(seconds=5)
+        reset_game()
         return
     for light in light_list:
         if play.mouse.is_clicked:
@@ -63,41 +61,36 @@ async def control_lights():
                 if light.num == 0:
                     toggle_light(light_list[light.num])
                     toggle_light(light_list[light.num + 1])
-                    you_win_light.counter += 1
+                    game.counter += 1
                 elif light.num == 6:
                     toggle_light(light_list[light.num - 1])
                     toggle_light(light_list[light.num])
-                    you_win_light.counter += 1
+                    game.counter += 1
                 else:
                     toggle_light(light_list[light.num - 1])
                     toggle_light(light_list[light.num])
                     toggle_light(light_list[light.num + 1])
-                    you_win_light.counter += 1
-                await play.timer(seconds=0.1)
+                    game.counter += 1
+                message.words = f"Moves: {game.counter}"
+                await play.timer(seconds=0.25)
 
-    on_counter = 0
+
     off_counter = 0
     for light in light_list:
-        if light.isOn:
-            on_counter += 1
-        else:
+        if not light.is_on:
             off_counter += 1
 
-    if on_counter == len(light_list):
-        you_win_light.game_over = True
-        you_win_light.isOn = True
-    elif off_counter == len(light_list):
-        you_win_light.game_over = True
-        you_win_light.isOn = False
+    if off_counter == len(light_list):
+        game.game_over = True
 
 
 def toggle_light(light):
-    if light.isOn:
-        light.image = light_images[1]
-        light.isOn = False
-    else:
+    if light.is_on:
         light.image = light_images[0]
-        light.isOn = True
+        light.is_on = False
+    else:
+        light.image = light_images[1]
+        light.is_on = True
 
 
 play.start_program()

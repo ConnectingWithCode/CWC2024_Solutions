@@ -37,8 +37,8 @@ def reset_game():
     for k in range(7):
         light_list[k].image = light_images[0]
         light_list[k].is_on = False
-    # for _ in range(100):
-    #     button_press(random.randint(0,6))
+    for _ in range(100):
+        button_press(random.randint(0,6))
     update_game_over()
     if game.game_over:
         button_press(random.randint(0,6))
@@ -65,7 +65,7 @@ def update_game_over():
             off_counter += 1
     if off_counter == len(light_list):
         game.game_over = True
-    else
+    else:
         game.game_over = False
 
 @play.repeat_forever

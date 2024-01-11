@@ -1,6 +1,7 @@
 import play
 import random
 
+
 play.new_image("christmas_background.png")
 
 # 1/11: we just created a randomized player button - it has no functionality yet

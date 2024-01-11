@@ -3,19 +3,16 @@ import random
 
 game = play.new_image("background.png", size=84)
 game.counter = 0
-game.game_over = False
 
-play.new_text("Linear Lights Out",
-              y=200,
-              font_size=100)
+play.new_text("Linear Lights Out", y=200, font_size=100)
 
 message = play.new_text("Turn all of the lights off!",
                         y=100,
                         font_size=50,
                         color = 'grey')
 
-light_list = []
 light_images = ["light_off.png", "light_on.png"]
+light_list = []
 
 for k in range(7):
     value = random.randint(0, 1)
@@ -78,4 +75,3 @@ def toggle_light(light):
 
 
 play.start_program()
-

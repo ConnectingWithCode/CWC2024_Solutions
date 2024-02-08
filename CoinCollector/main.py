@@ -14,7 +14,7 @@ hero.target = random.randint(30, 120)
 
 scoreboard = play.new_text(
   f"Balance = {hero.balance}   Target = {hero.target}",
-  x=-60,
+  x=0,
   y=100,
   font_size=50,
   color='purple')

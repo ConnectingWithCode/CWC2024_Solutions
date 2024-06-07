@@ -9,7 +9,7 @@ play.new_text("Linear Lights Out", y=200, font_size=100)
 message = play.new_text("Turn all of the lights off!",
                         y=100,
                         font_size=50,
-                        color = 'grey')
+                        color='grey')
 
 light_images = ["light_off.png", "light_on.png"]
 light_list = []
